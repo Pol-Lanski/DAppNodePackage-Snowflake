@@ -21,4 +21,8 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Local agent notes
+codex.md
+claude.md
   
