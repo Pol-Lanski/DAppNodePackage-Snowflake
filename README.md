@@ -32,12 +32,14 @@ Install the package from the Dappnode DAppStore or by using the direct IPFS / EN
 
 ### Networking
 
-Because Dappnode does not support `network_mode: host`, this package exposes a fixed UDP port range (`30000–30999`) mapped 1-to-1 to the host. For the proxy to be reachable you should:
+Because Dappnode does not support `network_mode: host`, this package exposes a fixed UDP port range (`30000–30999`) mapped 1-to-1 to the host. 
+
+You might get classified as a **restricted NAT** by the broker. It still works! Just works less effectively. If you want to make sure you are receiving connections, use the flag `--verbose` in EXTRA_OPTS in the configuration tab. 
+
+If you want to improve the reachability further, you should:
 
 1. Ensure your router forwards UDP ports **30000–30999** to your Dappnode host.
 2. Ensure your host firewall (if any) allows inbound traffic on the same range.
-
-Without port forwarding the proxy will still function but may be classified as a **restricted NAT** by the broker, which limits how many users can connect through it.
 
 ### Configuration
 
@@ -53,25 +55,7 @@ All available flags are documented in the [upstream repository](https://gitlab.t
 
 You can view the proxy logs in the Dappnode UI under **Packages → Snowflake → Logs**. With the default settings you will see periodic connection counts reported by the proxy. Add `--verbose` via `EXTRA_OPTS` for more detailed output.
 
-## Publishing
-
-This repo includes a GitHub Actions workflow at `.github/workflows/publish.yml` that publishes through the SDK flow and creates a GitHub release containing the `sdk-publish` link for the DAppNode publish site.
-
-You can trigger it in either of these ways:
-
-- Run the `Publish` workflow manually from the GitHub Actions tab and choose `patch`, `minor`, or `major`
-- Push a temporary tag named `release`, `release/patch`, `release/minor`, or `release/major`
-
-The workflow will:
-
-- Build the package for the declared architectures
-- Upload the release to remote DAppNode IPFS infrastructure
-- Create a prerelease on GitHub with release assets and a publish link to `https://dappnode.github.io/sdk-publish/`
-- Create the final version tag automatically
-
-If this package has never been published before, add a repository secret named `DEVELOPER_ADDRESS` with the Ethereum address that should own the package repository. `GITHUB_TOKEN` is provided automatically by GitHub Actions.
-
 ## Notes
 
 - The original `watchtower` sidecar was removed because Dappnode already manages package updates.
-- The proxy uses the upstream `latest` image tag. Pinning to a specific upstream release is safer for reproducible builds.
+- The proxy uses the upstream `latest` image tag.
